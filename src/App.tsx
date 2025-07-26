@@ -1,50 +1,55 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./pages/Authentication/Login";
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Login from './pages/Authentication/Login'
+import Register from "./pages/Authentication/Register";
+import Home from "./pages/home/Home";
 
-import Register from './pages/Authentication/Register'
-import Home from './pages/home/Home'
-
-import { ProtectedRoute } from './components/ProtectedRoute'
-import Users from './pages/users/Users'
-
-
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import Users from "./pages/users/Users";
+import Settings from "./pages/Settings";
 
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login/>
+    element: <Login />,
   },
   {
     path: "/register",
-    element: <Register/>
+    element: <Register />,
   },
   {
     path: "/home/*",
     element: (
-  <ProtectedRoute>
-      <Home/>
-   </ProtectedRoute>
-  )
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/users/*",
-    element:(
+    element: (
       <ProtectedRoute>
-      <Users/>
-       </ProtectedRoute>
-      ) // Assuming Users is a part of Home layout
-  }
-
-])
+        <Users />
+      </ProtectedRoute>
+    ), // Assuming Users is a part of Home layout
+  },
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <Settings />
+      </ProtectedRoute>
+    ),
+  },
+  
+]);
 
 const App = () => {
-  
   return (
-    <div className='items-center justify-center flex'>
-       <RouterProvider router= {router}/>
+    <div className="items-center justify-center flex">
+      <RouterProvider router={router} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

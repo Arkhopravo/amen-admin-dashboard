@@ -25,47 +25,51 @@ export function LoginForm({
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-
 const onSubmit = async (data: LoginFormInputs) => {
   try {
-    const result = await toast.promise(
-      new Promise(async (resolve, reject) => {
-        try {
-          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
+    const loginPromise = new Promise(async (resolve, reject) => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
 
-          if (!res.ok) {
-            const errData = await res.json();
-            return reject(new Error(errData.message || "Login failed"));
-          }
-
-          const result = await res.json();
-          resolve(result); // login success
-        } catch (err) {
-          reject(err);
+        if (!res.ok) {
+          const errData = await res.json();
+          return reject(new Error(errData.message || "Login failed"));
         }
-      }),
-      {
-        loading: "Logging in...",
-        success: (result: any) => `Welcome back, ${result.username}!`,
-        error: (err: any) => err.message || "Login failed",
-      }
-    );
 
-    // ✅ Navigate only after success
-    navigate("/home/dashboard");
+        const result = await res.json();
+        if(res.status === 200) {
+
+          navigate("/home/dashboard");
+        }
+        resolve(result); // success
+      } catch (err) {
+        reject(err);
+      }
+    });
+
+    // 🧠 Show toast while waiting
+    const result: any = await toast.promise(loginPromise, {
+      loading: "Logging in...",
+      success: "Login successful!",
+      error: (err: any) => err.message || "Login failed",
+    });
+
+    // ✅ Navigate *after* login and toast success
+  
 
   } catch (error) {
-    // ❌ Do nothing, user stays on page
     console.error("Login error:", error);
+    // stay on page
   }
 };
+
 
 
   return (

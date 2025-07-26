@@ -22,5 +22,5 @@ export const getAllUsers = async (): Promise<AllUser[]> => {
     throw new Error("Failed to fetch all users");
   }
 
-  return res.data.data; // ✅ return only the array
+  return res.data; // ✅ return only the array
 };

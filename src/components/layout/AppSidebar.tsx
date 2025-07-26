@@ -145,49 +145,71 @@ const AppSidebar = () => {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {sidebarItems.map((group) => (
-                <React.Fragment key={group.title}>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => toggleGroup(group.title)}
-                      className="flex justify-between items-center"
-                    >
-                      <span className="font-medium">{group.title}</span>
-                      <ChevronDown
-                        className={cn(
-                          "h-4 w-4 transition-transform",
-                          openGroup === group.title && "rotate-180"
-                        )}
-                      />
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+           {sidebarItems.map((group) => (
+  group.subData && group.subData.length > 0 ? (
+    <React.Fragment key={group.title}>
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          onClick={() => toggleGroup(group.title)}
+          className="flex justify-between items-center"
+        >
+          <span className="font-medium">{group.title}</span>
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 transition-transform",
+              openGroup === group.title && "rotate-180"
+            )}
+          />
+        </SidebarMenuButton>
+      </SidebarMenuItem>
 
-                  <AnimatePresence>
-                    {openGroup === group.title && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="pl-4 overflow-hidden"
-                      >
-                        {group?.subData?.map((sub) => (
-                          <SidebarMenuItem key={sub.title}>
-                            <SidebarMenuButton asChild>
-                              <Link
-                                to={`${group.url}/${sub.url}`}
-                                className="flex items-center gap-2 text-sm hover:underline"
-                              >
-                                <sub.icon className="h-4 w-4" />
-                                {sub.title}
-                              </Link>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        ))}
-                      </motion.div>
+      <AnimatePresence>
+        {openGroup === group.title && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="pl-4 overflow-hidden"
+          >
+            {group.subData.map((sub) => (
+              <SidebarMenuItem key={sub.title}>
+                <SidebarMenuButton asChild>
+                  <Link
+                    to={`${group.url}/${sub.url}`}
+                    className={cn(
+                      "flex items-center gap-2 text-sm hover:underline",
+                      window.location.pathname === `${group.url}/${sub.url}` && "text-primary font-semibold"
                     )}
-                  </AnimatePresence>
-                </React.Fragment>
-              ))}
+                  >
+                    <sub.icon className="h-4 w-4" />
+                    {sub.title}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </React.Fragment>
+  ) : (
+    // 🔹 Single link like "Settings"
+    <SidebarMenuItem key={group.title}>
+      <SidebarMenuButton asChild>
+        <Link
+          to={group.url}
+          className={cn(
+            "flex items-center gap-2 text-sm hover:underline",
+            window.location.pathname === group.url && "text-primary font-semibold"
+          )}
+        >
+          <Settings className="h-4 w-4" />
+          {group.title}
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+))}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
