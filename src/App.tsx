@@ -1,34 +1,33 @@
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import Login from "./pages/Authentication/Login";
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Login from './pages/Authentication/Login'
-import Dashboard from './pages/dashboard/Dashboard'
-import Register from './pages/Authentication/Register'
-
-
+import Register from "./pages/Authentication/Register";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Login/>
+    path: "/login",
+    element: <Login />,
   },
   {
-
+    path: "*",
+    element: <Navigate to="/login" />,
+  },
+  {
     path: "/register",
-    element: <Register/>  
-
+    element: <Register />,
   },
-  {
-    path: "/dashboard",
-    element: <Dashboard/>
-  }
-])
+]);
 
 const App = () => {
   return (
-    <div className='items-center justify-center flex'>
-       <RouterProvider router= {router}/>
+    <div className="items-center justify-center flex">
+      <RouterProvider router={router} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
